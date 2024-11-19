@@ -5,7 +5,9 @@
 #![unstable(issue = "none", feature = "windows_c")]
 #![allow(clippy::style)]
 
-use core::ffi::{c_uint, c_ulong, c_ushort, c_void};
+#[allow(unused_imports)]
+use core::ffi::c_void;
+use core::ffi::{c_uint, c_ulong, c_ushort};
 use core::{mem, ptr};
 
 mod windows_sys;
@@ -180,6 +182,7 @@ compat_fn_with_fallback! {
 }
 
 // These are loaded by `load_synch_functions`.
+#[cfg(not(target_vendor = "rust9x"))]
 compat_fn_optional! {
     pub fn WaitOnAddress(
         address: *const c_void,
@@ -188,6 +191,26 @@ compat_fn_optional! {
         dwmilliseconds: u32
     ) -> BOOL;
     pub fn WakeByAddressSingle(address: *const c_void);
+}
+
+#[cfg(target_vendor = "rust9x")]
+compat_fn_with_fallback! {
+    pub static SYNCH: &CStr = c"api-ms-win-core-synch-l1-2-0" => { load: true, unicows: false };
+
+    pub fn WaitOnAddress(
+        address: *const c_void,
+        compareaddress: *const c_void,
+        addresssize: usize,
+        dwmilliseconds: u32
+    ) -> BOOL {
+        rtabort!("unimplemented")
+    }
+    pub fn WakeByAddressSingle(address: *const c_void) {
+        rtabort!("unimplemented")
+    }
+    pub fn WakeByAddressAll(address: *const c_void) {
+        rtabort!("unimplemented")
+    }
 }
 
 compat_fn_with_fallback! {
