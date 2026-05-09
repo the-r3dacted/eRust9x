@@ -14,6 +14,7 @@ windows_targets::link!("kernel32.dll" "system" fn CloseHandle(hobject : HANDLE) 
 windows_targets::link!("kernel32.dll" "system" fn CompareStringOrdinal(lpstring1 : PCWSTR, cchcount1 : i32, lpstring2 : PCWSTR, cchcount2 : i32, bignorecase : BOOL) -> COMPARESTRING_RESULT);
 windows_targets::link!("kernel32.dll" "system" fn CopyFileExW(lpexistingfilename : PCWSTR, lpnewfilename : PCWSTR, lpprogressroutine : LPPROGRESS_ROUTINE, lpdata : *const core::ffi::c_void, pbcancel : *mut BOOL, dwcopyflags : u32) -> BOOL);
 windows_targets::link!("kernel32.dll" "system" fn CreateDirectoryW(lppathname : PCWSTR, lpsecurityattributes : *const SECURITY_ATTRIBUTES) -> BOOL);
+windows_targets::link!("kernel32.dll" "system" fn CreateEventA(lpeventattributes : *const SECURITY_ATTRIBUTES, bmanualreset : BOOL, binitialstate : BOOL, lpname : PCSTR) -> HANDLE);
 windows_targets::link!("kernel32.dll" "system" fn CreateEventW(lpeventattributes : *const SECURITY_ATTRIBUTES, bmanualreset : BOOL, binitialstate : BOOL, lpname : PCWSTR) -> HANDLE);
 windows_targets::link!("kernel32.dll" "system" fn CreateFileW(lpfilename : PCWSTR, dwdesiredaccess : u32, dwsharemode : FILE_SHARE_MODE, lpsecurityattributes : *const SECURITY_ATTRIBUTES, dwcreationdisposition : FILE_CREATION_DISPOSITION, dwflagsandattributes : FILE_FLAGS_AND_ATTRIBUTES, htemplatefile : HANDLE) -> HANDLE);
 windows_targets::link!("kernel32.dll" "system" fn CreateHardLinkW(lpfilename : PCWSTR, lpexistingfilename : PCWSTR, lpsecurityattributes : *const SECURITY_ATTRIBUTES) -> BOOL);

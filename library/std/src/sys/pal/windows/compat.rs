@@ -65,23 +65,11 @@ unsafe extern "C" fn init() {
     // because this function runs during global initialization. For example, DO NOT
     // do any dynamic allocation, don't call LoadLibrary, etc.
 
+    #[cfg(target_vendor = "rust9x")]
+    checks::init_rust9x_checks();
+
     // Attempt to preload the synch functions.
     load_synch_functions();
-}
-
-#[cfg(target_vendor = "rust9x")]
-unsafe extern "C" fn init() {
-    // In an exe this code is executed before main() so is single threaded.
-    // In a DLL the system's loader lock will be held thereby synchronizing
-    // access. So the same best practices apply here as they do to running in DllMain:
-    // https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-best-practices
-    //
-    // DO NOT do anything interesting or complicated in this function! DO NOT call
-    // any Rust functions or CRT functions if those functions touch any global state,
-    // because this function runs during global initialization. For example, DO NOT
-    // do any dynamic allocation, don't call LoadLibrary, etc.
-
-    checks::init_rust9x_checks();
 }
 
 /// Helper macro for creating CStrs from literals and symbol names.
@@ -271,9 +259,7 @@ macro_rules! compat_fn_optional {
                 #[inline(always)]
                 #[allow(dead_code)]
                 pub fn option() -> Option<F> {
-                    unsafe {
-                        NonNull::new(PTR.load(Ordering::Relaxed)).map(|f| unsafe { mem::transmute(f) })
-                    }
+                    NonNull::new(PTR.load(Ordering::Relaxed)).map(|f| unsafe { mem::transmute(f) })
                 }
 
                 #[inline(always)]
