@@ -301,6 +301,7 @@ pub(crate) fn load_from_module(
 }
 
 /// Load all needed functions from "api-ms-win-core-synch-l1-2-0".
+#[allow(dead_code)]
 pub(super) fn load_synch_functions() {
     fn try_load() -> Option<()> {
         use crate::sync::atomic::Ordering;
